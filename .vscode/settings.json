@@ -1,0 +1,7 @@
+{
+    "deno.enable": true,
+    "deno.unstable": true,
+    "deno.lint": true,
+    "deno.cacheOnSave": true,
+    "deno.suggest.imports.autoDiscover": true
+}
