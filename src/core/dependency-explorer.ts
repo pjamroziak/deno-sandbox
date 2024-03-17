@@ -1,42 +1,52 @@
 import { Constructor } from "../core/types.ts";
+import { isNil } from "../utils/comparers.util.ts";
 
 export class DependencyExplorer {
-    private readonly graph = new Map<Constructor, Constructor[]>();
+  private readonly graph = new Map<Constructor, Constructor[]>();
 
-    addDependency(from: Constructor, to: Constructor) {
-        this.addNode(from);
-        this.addNode(to);
+  explore(): Constructor[] {
+    const visited = new Set<Constructor>();
+    const stack: Constructor[] = [];
 
-        this.graph.get(from)!.push(to);
+    if (this.graph.size === 0) return [];
+
+    for (const [node] of this.graph) {
+      this.dfs(node, visited, stack);
     }
 
-    explore(): Constructor[] {
-        const visited = new Set<Constructor>();
-        const stack: Constructor[] = [];
+    this.graph.clear();
 
-        if(this.graph.size === 0) return [];
+    return stack.reverse();
+  }
 
-        for (const [node] of this.graph) {
-            this.dfs(node, visited, stack);
-        }
+  addDependency(from: Constructor, to?: Constructor) {
+    this.addNode(from);
 
-        return stack.reverse();
+    if (!isNil(to)) {
+      this.addNode(to);
+
+      this.graph.get(from)!.push(to);
+    }
+  }
+
+  private dfs(
+    node: Constructor,
+    visited: Set<Constructor>,
+    stack: Constructor[],
+  ): void {
+    if (!visited.has(node)) visited.add(node);
+
+    const dependencies = this.graph.get(node) ?? [];
+    for (const child of dependencies) {
+      this.dfs(child, visited, stack);
     }
 
-    private dfs(node: Constructor, visited: Set<Constructor>, stack: Constructor[]): void {
-        if(!visited.has(node)) visited.add(node);
-        
-        const dependencies = this.graph.get(node) ?? [];
-        for (const child of dependencies) {
-            this.dfs(child, visited, stack);
-        }
+    if(!stack.includes(node)) stack.unshift(node);
+  }
 
-        stack.unshift(node);
+  private addNode(node: Constructor) {
+    if (!this.graph.has(node)) {
+      this.graph.set(node, []);
     }
-
-    private addNode(node: Constructor) {
-        if (!this.graph.has(node)) {
-            this.graph.set(node, []);
-        }
-    }
+  }
 }

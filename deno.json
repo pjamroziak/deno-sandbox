@@ -1,5 +1,13 @@
 {
   "tasks": {
-    "dev": "deno run --watch src/main.ts"
+    "dev": "deno run --watch example/main.ts"
+  },
+  "imports": {
+    "reflection": "https://deno.land/x/reflection/mod.ts",
+    "optic": "https://deno.land/x/optic/mod.t"
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

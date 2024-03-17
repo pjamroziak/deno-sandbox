@@ -1,4 +1,6 @@
-export function setDecoratorMetadataByKey<Value = any>(context: ClassMemberDecoratorContext, key: string, value: Value): Value {
-    context.metadata[key] = value;
-    return context.metadata[key] as Value;
+import { Constructor } from "../core/types.ts";
+
+export function setConstructorMetadataByKey<Value = any>(constructor: Constructor, key: string, value: Value): Value {
+    Reflect.defineMetadata(key, value, constructor);
+    return Reflect.getMetadata(key, constructor) as Value;
 }
