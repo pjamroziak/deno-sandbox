@@ -1,10 +1,9 @@
 import { Constructor } from "../core/types.ts";
 
-export function getConstructorMetadataByKey<Result = any>(constructor: Constructor<unknown>, key: string): Result | undefined {
-    const metadata = Reflect.getMetadata<Result>(key, constructor);
-    return metadata;
+export function getMetadata<Result = any>(constructor: Constructor<unknown>, key: string, propertyKey?: string): Result | undefined {
+    return Reflect.getMetadata<Result>(key, constructor, propertyKey);
 }
 
-export function getConstructorParamTypes(constructor: Constructor<unknown>): any[] {
-    return Reflect.getMetadata("design:paramtypes", constructor) ?? [];
+export function getParamTypes(constructor: Constructor<unknown>, propertyKey?: string): unknown[] {
+    return getMetadata(constructor, "design:paramtypes", propertyKey) ?? [];
 }

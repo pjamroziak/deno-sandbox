@@ -1,0 +1,25 @@
+export const snapshot = {};
+
+snapshot[`ServiceOrderExplorer > should return array of all necessary services, ordered by construction order 1`] = `
+[
+  "d",
+  "c",
+  "b",
+  "a",
+]
+`;
+
+snapshot[`ServiceOrderExplorer > should return array with one service 1`] = `
+[
+  "d",
+]
+`;
+
+snapshot[`ServiceOrderExplorer > should return array of all necessary services, ordered by construction order when service has circular dependency 1`] = `
+[
+  "d",
+  "c",
+  "b",
+  "a",
+]
+`;
