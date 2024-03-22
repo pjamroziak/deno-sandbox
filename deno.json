@@ -1,10 +1,13 @@
 {
   "tasks": {
-    "dev": "deno run --watch example/main.ts"
+    "dev": "deno run --watch --allow-all example/main.ts"
   },
   "imports": {
-    "reflection": "https://deno.land/x/reflection/mod.ts",
-    "optic": "https://deno.land/x/optic/mod.t"
+    "@std/assert": "jsr:@std/assert@^0.220.1",
+    "@std/testing": "jsr:@std/testing@^0.220.1",
+    "hono": "https://deno.land/x/hono/mod.ts",
+    "optic": "https://deno.land/x/optic/mod.t",
+    "reflection": "https://deno.land/x/reflection@0.0.2/mod.ts"
   },
   "compilerOptions": {
     "experimentalDecorators": true,
