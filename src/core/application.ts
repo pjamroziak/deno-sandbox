@@ -43,8 +43,8 @@ export class Application {
 
 				// @ts-ignore: I don't care about type here
 				const handler = controller[method].bind(controller);
-				console.log(`${metadata.method}: ${metadata.path}`);
 				this.httpProvider.addRoute(metadata.method, metadata.path, handler);
+				console.log(`${metadata.method}: ${metadata.path}`);
 			}
 		}
 

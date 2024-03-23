@@ -1,8 +1,8 @@
-import { Hono } from 'https://deno.land/x/hono@v4.1.3/mod.ts';
+import { Hono } from 'hono';
 import { Context } from 'https://deno.land/x/hono@v4.1.3/context.ts';
-import { Req } from '../core/http/request.ts';
-import { HttpMethodTypeEnum, HttpMethodTypes } from '../core/constants.ts';
-import { HttpProvider } from '../core/http-provider.ts';
+import { Req } from '../../core/http/request.ts';
+import { HttpMethodTypeEnum, HttpMethodTypes } from '../../core/constants.ts';
+import { HttpProvider } from '../../core/http-provider.ts';
 
 const supportHandler = async (context: Context, method: Function) => {
 	const request = new Req(

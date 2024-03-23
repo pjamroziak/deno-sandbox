@@ -1,5 +1,5 @@
 import { Target } from 'reflection';
-import { setMetadata } from '../../../utils/index.ts';
+import { setMetadata } from '../../../utils/set-metadata.util.ts';
 import { HttpMethodTypes, MetadataTypes } from '../../constants.ts';
 
 export function Post(path: string): MethodDecorator {

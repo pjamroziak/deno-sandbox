@@ -1,6 +1,6 @@
 import { isMarkedAsController } from '../utils/comparers.util.ts';
 import { getParamTypes } from '../utils/get-metadata.util.ts';
-import { isClass, isMarkedAsService } from '../utils/index.ts';
+import { isClass, isMarkedAsService } from '../utils/comparers.util.ts';
 import { ServiceOrderExplorer } from './service-order-explorer.ts';
 import { Constructor } from './types.ts';
 
