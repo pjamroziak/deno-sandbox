@@ -1,5 +1,10 @@
 {
     "deno.enable": true,
     "deno.lint": true,
-    "deno.cacheOnSave": true
+    "deno.cacheOnSave": true,
+    "deno.codeLens.implementations": true,
+    "deno.codeLens.references": true,
+    "deno.codeLens.referencesAllFunctions": true,
+    "editor.formatOnSave": true,
+    "[typescript]": { "editor.defaultFormatter": "denoland.vscode-deno" }
 }

@@ -1,57 +1,12 @@
-import { Application } from "../src/core/application.ts";
-import { Controller } from "../src/core/decorators/controller.decorator.ts";
-import { Service } from "../src/core/decorators/service.decorator.ts";
-import { HonoProvider } from "../src/hono/provider.ts";
-import { HelloWorldController } from "./routes/hello-world.controller.ts";
+import { Application } from '../src/core/application.ts';
+import { HonoProvider } from '../src/hono/provider.ts';
+import { HelloWorldController } from './routes/hello-world.controller.ts';
+import { HelloWorldService } from './services/hello-world.service.ts';
 
+const app = new Application(new HonoProvider());
 
-@Controller
-class F {
-}
+app.services
+	.addSingleton(HelloWorldService)
+	.addController(HelloWorldController);
 
-@Service
-class D {
-}
-
-
-@Controller
-class E {
-    constructor(
-        private readonly d: D,
-        private readonly f: F,
-    ) {
-    }
-}
-
-
-@Service
-class C {
-}
-
-@Service
-class B {
-  constructor(
-    private readonly d: D,
-  ) {
-  }
-}
-
-@Service
-class A {
-  constructor(
-    private readonly b: B,
-    private readonly c: C,
-  ) {
-  }
-}
-
-const app = new Application();
-app.services.addSingleton(A)
-  .addSingleton(B)
-  .addSingleton(C)
-  .addSingleton(D)
-  .addController(E)
-  .addController(F)
-  .addController(HelloWorldController)
-
-app.listen(new HonoProvider());
+app.listen(3000);

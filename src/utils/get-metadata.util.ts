@@ -1,9 +1,18 @@
-import { Constructor } from "../core/types.ts";
+import "reflection";
 
-export function getMetadata<Result = any>(constructor: Constructor<unknown>, key: string, propertyKey?: string): Result | undefined {
-    return Reflect.getMetadata<Result>(key, constructor, propertyKey);
+import { Target } from "reflection";
+
+export function getMetadata<Result = unknown>(
+  constructor: Target,
+  key: string,
+  propertyKey?: string,
+): Result | undefined {
+  return Reflect.getMetadata<Result>(key, constructor, propertyKey);
 }
 
-export function getParamTypes(constructor: Constructor<unknown>, propertyKey?: string): unknown[] {
-    return getMetadata(constructor, "design:paramtypes", propertyKey) ?? [];
+export function getParamTypes(
+  constructor: Target,
+  propertyKey?: string,
+): unknown[] {
+  return getMetadata(constructor, "design:paramtypes", propertyKey) ?? [];
 }

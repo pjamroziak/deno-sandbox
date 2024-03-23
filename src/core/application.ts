@@ -1,46 +1,53 @@
-import { HonoProvider } from "../hono/provider.ts";
-import { isMarkedAsController } from "../utils/comparers.util.ts";
-import { getMetadata } from "../utils/get-metadata.util.ts";
-import { ClassType, HttpMethodType } from "./constants.ts";
-import { ConstructorContainer } from "./service-container.ts";
-import { ServiceInitializer } from "./service-initializer.ts";
+import { isMarkedAsController } from '../utils/comparers.util.ts';
+import { getMetadata } from '../utils/get-metadata.util.ts';
+import { HttpMethodTypeEnum, MetadataTypes } from './constants.ts';
+import { HttpProvider } from './http-provider.ts';
+import { ConstructorContainer } from './constructor-container.ts';
+import { ServiceInitializer } from './service-initializer.ts';
 
 export class Application {
-    readonly services: ConstructorContainer;
+	readonly services: ConstructorContainer;
 
-    constructor() {
-        this.services = new ConstructorContainer();
-    }
+	readonly httpProvider?: HttpProvider;
 
-    public run() {
-        const instances = ServiceInitializer.resolve(this.services);
-        return instances;
-    }
+	constructor(httpProvider?: HttpProvider) {
+		this.services = new ConstructorContainer();
+		this.httpProvider = httpProvider;
+	}
 
-    public listen(honoProvider: HonoProvider) {
-        const instances = ServiceInitializer.resolve(this.services);
-        
-        const controllers = instances.filter((instance) => isMarkedAsController(instance));
+	public listen(port: number) {
+		const instances = ServiceInitializer.resolve(this.services);
 
-        for (const controller of controllers) {
-            const prototype = Object.getPrototypeOf(controller);
-            for (const method of Object.getOwnPropertyNames(prototype)) {
-                if (method === "constructor") {
-                    continue;
-                }
+		if (!this.httpProvider) {
+			throw new Error('Missing HTTP Provider');
+		}
 
-                const metadata = getMetadata(prototype, HttpMethodType.Get, method);
-                if(!metadata) {
-                    continue;
-                }
+		const controllers = instances.filter((instance) =>
+			isMarkedAsController(instance)
+		);
 
-                const handler = controller[method].bind(controller);
-                honoProvider.addRoute(metadata.path, handler);
-            }
-        }
+		for (const controller of controllers) {
+			const prototype = Object.getPrototypeOf(controller);
+			for (const method of Object.getOwnPropertyNames(prototype)) {
+				if (method === 'constructor') {
+					continue;
+				}
 
-        const entryPoint = honoProvider.getEntryPoint();
+				const metadata = getMetadata<
+					{ method: HttpMethodTypeEnum; path: string }
+				>(prototype, MetadataTypes.HttpEndpoint, method);
 
-        Deno.serve({ port: 3000 }, entryPoint);
-    }
+				if (!metadata) {
+					continue;
+				}
+
+				// @ts-ignore: I don't care about type here
+				const handler = controller[method].bind(controller);
+				console.log(`${metadata.method}: ${metadata.path}`);
+				this.httpProvider.addRoute(metadata.method, metadata.path, handler);
+			}
+		}
+
+		this.httpProvider.serve(port);
+	}
 }
